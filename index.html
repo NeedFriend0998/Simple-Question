@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+#question { font-size: 20px; margin-bottom: 10px; }
+input, button { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
+#reply { font-style: italic; color: #333; }
+</style>
+</head>
+<body>
+
+<div id="question">Apa hobbymu?</div>
+<input type="text" id="answer" placeholder="Tulis jawabanmu...">
+<button onclick="checkAnswer()">Kirim</button>
+<div id="reply"></div>
+
+<script>
+function checkAnswer() {
+    var answer = document.getElementById("answer").value.trim().toLowerCase();
+    var reply = "";
+    
+    if (answer === "coding") {
+        reply = "Wih, bagus tuh tingkatin lagi ya skillmu!";
+    } else if (answer !== "") {
+        reply = "Wih bagus juga tingkatin lagi ya skill " + answer;
+    } else {
+        reply = "Kamu belum jawab nih 😅";
+    }
+    
+    document.getElementById("reply").innerHTML = reply;
+}
+</script>
+
+</body>
+</html>
