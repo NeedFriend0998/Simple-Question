@@ -2,78 +2,90 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
-#question { font-size: 20px; margin-bottom: 10px; min-height: 40px; }
-input, button { padding: 8px; font-size: 16px; width: 90%; margin: 5px auto; display: block; }
-#reply { font-style: italic; color: #333; min-height: 30px; margin-top: 10px; }
-button { background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
-button:hover { background: #45a049; }
+body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+#question { font-size: 20px; margin-bottom: 10px; }
+input, button { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
+#reply { font-style: italic; color: #333; min-height: 25px; }
 </style>
 </head>
 <body>
 
 <div id="question"></div>
 <input type="text" id="answer" placeholder="Tulis jawabanmu...">
-<button onclick="checkAnswer()">Kirim</button>
-<button onclick="nextQuestion()">Next</button>
+<button id="actionBtn" onclick="checkAnswer()">Kirim</button>
 <div id="reply"></div>
 
 <script>
-let questions = [
-    {q: "Apa hobbymu?", t: { "coding": "Wih, bagus tuh tingkatin lagi ya skillmu!" }},
-    {q: "Makanan favoritmu?", t: { "bakso": "Bakso memang mantap, apalagi kuahnya!" }},
-    {q: "Kota yang ingin kamu kunjungi?", t: { "tokyo": "Wih, Jepang! Semoga kesampaian ya!" }}
-];
 let current = 0;
 
-function typeQuestion(text, callback) {
-    let i = 0;
-    let display = "";
-    let speed = 50; // kecepatan ketik
-    let questionDiv = document.getElementById("question");
-    questionDiv.innerHTML = "";
-    let typing = setInterval(() => {
-        display += text.charAt(i);
-        questionDiv.innerHTML = display;
-        i++;
-        if (i >= text.length) {
-            clearInterval(typing);
-            if (callback) callback();
+// Setiap pertanyaan punya tanggapan khusus
+let data = [
+    {
+        q: "Apa hobbymu?",
+        reply: function(answer) {
+            if (answer === "coding") {
+                return "Wih, bagus tuh tingkatin lagi ya skillmu!";
+            } else if (answer !== "") {
+                return "Wih bagus juga tingkatin lagi ya skill " + answer;
+            } else {
+                return "Kamu belum jawab nih 😅";
+            }
         }
-    }, speed);
-}
+    },
+    {
+        q: "Makanan favoritmu?",
+        reply: function(answer) {
+            if (answer === "bakso") {
+                return "Wah, pecinta bakso nih 🍜";
+            } else if (answer !== "") {
+                return "Hmm, " + answer + " juga enak sih 🤤";
+            } else {
+                return "Kamu belum jawab nih 😅";
+            }
+        }
+    },
+    {
+        q: "Kota yang ingin kamu kunjungi?",
+        reply: function(answer) {
+            if (answer === "tokyo") {
+                return "Keren! Tokyo memang keren banget 🌆";
+            } else if (answer !== "") {
+                return "Wah, semoga kamu bisa ke " + answer + " suatu hari nanti ✈️";
+            } else {
+                return "Kamu belum jawab nih 😅";
+            }
+        }
+    }
+];
 
-function showQuestion() {
-    document.getElementById("reply").innerHTML = "";
-    document.getElementById("answer").value = "";
-    typeQuestion(questions[current].q);
-}
+// Tampilkan pertanyaan pertama
+document.getElementById("question").innerText = data[current].q;
 
 function checkAnswer() {
     let answer = document.getElementById("answer").value.trim().toLowerCase();
-    let reply = "";
-    if (answer) {
-        if (questions[current].t[answer]) {
-            reply = questions[current].t[answer];
-        } else {
-            reply = "Wih bagus juga tingkatin lagi ya skill " + answer;
-        }
-    } else {
-        reply = "Kamu belum jawab nih 😅";
-    }
+    let reply = data[current].reply(answer);
     document.getElementById("reply").innerHTML = reply;
+
+    // Ganti tombol jadi Next
+    let btn = document.getElementById("actionBtn");
+    btn.innerText = "Next";
+    btn.onclick = nextQuestion;
 }
 
 function nextQuestion() {
     current++;
-    if (current >= questions.length) {
-        current = 0; // balik lagi ke awal
+    if (current >= data.length) {
+        current = 0; // ulang dari awal kalau sudah habis
     }
-    showQuestion();
-}
 
-// Tampilkan pertanyaan pertama
-showQuestion();
+    document.getElementById("question").innerText = data[current].q;
+    document.getElementById("answer").value = "";
+    document.getElementById("reply").innerHTML = "";
+
+    let btn = document.getElementById("actionBtn");
+    btn.innerText = "Kirim";
+    btn.onclick = checkAnswer;
+}
 </script>
 
 </body>
