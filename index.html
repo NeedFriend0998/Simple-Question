@@ -18,17 +18,14 @@ input, button { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px;
 <script>
 let current = 0;
 
-// Setiap pertanyaan punya tanggapan khusus
 let data = [
     {
         q: "Apa hobbymu?",
         reply: function(answer) {
             if (answer === "coding") {
                 return "Wih, bagus tuh tingkatin lagi ya skillmu!";
-            } else if (answer !== "") {
-                return "Wih bagus juga tingkatin lagi ya skill " + answer;
             } else {
-                return "Kamu belum jawab nih 😅";
+                return "Wih bagus juga tingkatin lagi ya skill " + answer;
             }
         }
     },
@@ -37,10 +34,8 @@ let data = [
         reply: function(answer) {
             if (answer === "bakso") {
                 return "Wah, pecinta bakso nih 🍜";
-            } else if (answer !== "") {
-                return "Hmm, " + answer + " juga enak sih 🤤";
             } else {
-                return "Kamu belum jawab nih 😅";
+                return "Hmm, " + answer + " juga enak sih 🤤";
             }
         }
     },
@@ -49,20 +44,24 @@ let data = [
         reply: function(answer) {
             if (answer === "tokyo") {
                 return "Keren! Tokyo memang keren banget 🌆";
-            } else if (answer !== "") {
-                return "Wah, semoga kamu bisa ke " + answer + " suatu hari nanti ✈️";
             } else {
-                return "Kamu belum jawab nih 😅";
+                return "Wah, semoga kamu bisa ke " + answer + " suatu hari nanti ✈️";
             }
         }
     }
 ];
 
-// Tampilkan pertanyaan pertama
 document.getElementById("question").innerText = data[current].q;
 
 function checkAnswer() {
-    let answer = document.getElementById("answer").value.trim().toLowerCase();
+    let answerField = document.getElementById("answer");
+    let answer = answerField.value.trim().toLowerCase();
+
+    if (answer === "") {
+        document.getElementById("reply").innerHTML = "⚠️ Kamu harus jawab dulu!";
+        return; // Stop di sini, jangan ubah tombol
+    }
+
     let reply = data[current].reply(answer);
     document.getElementById("reply").innerHTML = reply;
 
@@ -75,7 +74,10 @@ function checkAnswer() {
 function nextQuestion() {
     current++;
     if (current >= data.length) {
-        current = 0; // ulang dari awal kalau sudah habis
+        document.getElementById("question").innerText = "Pertanyaan sudah selesai ✅";
+        document.getElementById("answer").style.display = "none";
+        document.getElementById("actionBtn").style.display = "none";
+        return;
     }
 
     document.getElementById("question").innerText = data[current].q;
