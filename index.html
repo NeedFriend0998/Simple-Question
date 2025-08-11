@@ -2,34 +2,78 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial; background: #f4f4f4; padding: 20px; }
-#question { font-size: 20px; margin-bottom: 10px; }
-input, button { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
-#reply { font-style: italic; color: #333; }
+body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
+#question { font-size: 20px; margin-bottom: 10px; min-height: 40px; }
+input, button { padding: 8px; font-size: 16px; width: 90%; margin: 5px auto; display: block; }
+#reply { font-style: italic; color: #333; min-height: 30px; margin-top: 10px; }
+button { background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+button:hover { background: #45a049; }
 </style>
 </head>
 <body>
 
-<div id="question">Apa hobbymu?</div>
+<div id="question"></div>
 <input type="text" id="answer" placeholder="Tulis jawabanmu...">
 <button onclick="checkAnswer()">Kirim</button>
+<button onclick="nextQuestion()">Next</button>
 <div id="reply"></div>
 
 <script>
+let questions = [
+    {q: "Apa hobbymu?", t: { "coding": "Wih, bagus tuh tingkatin lagi ya skillmu!" }},
+    {q: "Makanan favoritmu?", t: { "bakso": "Bakso memang mantap, apalagi kuahnya!" }},
+    {q: "Kota yang ingin kamu kunjungi?", t: { "tokyo": "Wih, Jepang! Semoga kesampaian ya!" }}
+];
+let current = 0;
+
+function typeQuestion(text, callback) {
+    let i = 0;
+    let display = "";
+    let speed = 50; // kecepatan ketik
+    let questionDiv = document.getElementById("question");
+    questionDiv.innerHTML = "";
+    let typing = setInterval(() => {
+        display += text.charAt(i);
+        questionDiv.innerHTML = display;
+        i++;
+        if (i >= text.length) {
+            clearInterval(typing);
+            if (callback) callback();
+        }
+    }, speed);
+}
+
+function showQuestion() {
+    document.getElementById("reply").innerHTML = "";
+    document.getElementById("answer").value = "";
+    typeQuestion(questions[current].q);
+}
+
 function checkAnswer() {
-    var answer = document.getElementById("answer").value.trim().toLowerCase();
-    var reply = "";
-    
-    if (answer === "coding") {
-        reply = "Wih, bagus tuh tingkatin lagi ya skillmu!";
-    } else if (answer !== "") {
-        reply = "Wih bagus juga tingkatin lagi ya skill " + answer;
+    let answer = document.getElementById("answer").value.trim().toLowerCase();
+    let reply = "";
+    if (answer) {
+        if (questions[current].t[answer]) {
+            reply = questions[current].t[answer];
+        } else {
+            reply = "Wih bagus juga tingkatin lagi ya skill " + answer;
+        }
     } else {
         reply = "Kamu belum jawab nih 😅";
     }
-    
     document.getElementById("reply").innerHTML = reply;
 }
+
+function nextQuestion() {
+    current++;
+    if (current >= questions.length) {
+        current = 0; // balik lagi ke awal
+    }
+    showQuestion();
+}
+
+// Tampilkan pertanyaan pertama
+showQuestion();
 </script>
 
 </body>
