@@ -97,10 +97,7 @@
         <a href="#">Services</a>
         <a href="#">Contact</a>
     </div>
-    <div>
-        <span class="toggle" id="toggle">&#9776;</span>
-        <button class="theme-btn" id="themeBtn">🌙</button>
-    </div>
+    
 </nav>
 
 <script>
@@ -112,12 +109,6 @@
     // Toggle menu di HP
     toggle.addEventListener('click', () => {
         menu.classList.toggle('show');
-    });
-
-    // Toggle Dark/Light mode
-    themeBtn.addEventListener('click', () => {
-        body.classList.toggle('dark');
-        themeBtn.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
     });
 </script>
 
