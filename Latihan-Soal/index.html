@@ -27,7 +27,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1px 1px;
+        padding: 10px 20px;
         background: var(--accent);
         color: white;
         position: sticky;
@@ -112,6 +112,12 @@
     // Toggle menu di HP
     toggle.addEventListener('click', () => {
         menu.classList.toggle('show');
+    });
+
+    // Toggle Dark/Light mode
+    themeBtn.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        themeBtn.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
     });
 </script>
 
